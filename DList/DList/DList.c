@@ -16,7 +16,7 @@ void DLInit(PPDL pplist)
 	*pplist = cur;
 	(*pplist)->next = *pplist;
 	(*pplist)->prev = *pplist;
-
+	(*pplist)->data = 999;
 }
 
 
@@ -115,5 +115,73 @@ void DLpopback(PDL plist)
 	free(tail->next);
 	plist->prev = tail;
 	tail->next = plist;
+
+}
+
+// 结点查找
+int DListSearch(PDL plist, DLDataType x)
+{
+	assert(plist->next);
+
+	int count = 0;
+	PDL tail = plist->next;
+	while (tail->data != x && tail != plist)
+	{
+		tail = tail->next;
+		count++;
+	}
+	if (tail == plist)
+		return -1;
+	return count;
+}
+
+
+// 指定pos位插入
+void DLInsert(PDL plist, DLDataType x,size_t pos)
+{
+	// 链表为空时，只允许在pos = 0的地址插入
+	assert(plist->next != plist || pos == 0);
+
+	//	创建新结点
+	PDL newnode = BuyNewNode();
+	newnode->data = x;
+
+	// 寻找pos位
+	size_t count = 0;
+	PDL cur = plist->next;
+	while (count < pos)
+	{
+		cur = cur->next;
+		count++;
+		assert(cur != plist);
+	}
+
+	// 插入结点
+	newnode->next = cur;
+	newnode->prev = cur->prev;
+	cur->prev = newnode;
+	newnode->prev->next = newnode;
+}
+
+
+// 指定pos位删除
+void DLerase(PDL plist, size_t pos)
+{
+	assert(plist->next != plist);
+
+	// 寻找pos位
+	size_t count = 0;
+	PDL cur = plist;
+	while (count < pos)
+	{
+		cur = cur->next;
+		count++;
+		assert(cur != plist);
+	}
+
+	PDL tail = cur->next->next;
+	free(cur->next);
+	cur->next = tail;
+	tail->prev = cur;
 
 }

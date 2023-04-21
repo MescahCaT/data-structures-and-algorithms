@@ -37,3 +37,12 @@ void DLpopfront(PDL plist);
 
 // 尾删
 void DLpopback(PDL plist);
+
+// 结点查找 -- 寻找无果则返回-1
+int DListSearch(PDL plist, DLDataType x);
+
+// 指定pos位插入
+void DLInsert(PDL plist, DLDataType x,size_t pos);
+
+// 指定pos位删除
+void DLerase(PDL plist, size_t pos);
